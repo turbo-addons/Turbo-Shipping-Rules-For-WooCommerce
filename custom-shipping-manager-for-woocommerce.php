@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Custom Shipping Manager for WooCommerce
- * Plugin URI: https://turbo-addons.com/custom-shipping-manager-for-woocommerce
+ * Plugin URI: https://wp-turbo.com/custom-shipping-manager-for-woocommerce/
  * Description: Easily manage WooCommerce shipping with custom states (inside city, outside city, intercity) and advanced weight-based shipping methods filtered by product categories. Fast, simple, and powerful shipping manager for WooCommerce.
  * Version: 1.0.0
  * Requires Plugins: woocommerce

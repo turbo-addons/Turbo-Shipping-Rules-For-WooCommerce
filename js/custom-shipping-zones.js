@@ -16,7 +16,8 @@ jQuery(document).ready(function($){
         // Ajax call to get regions
         $.post(csmfw_shipping.ajax_url, { 
             action: 'csmfw_get_zone_regions', 
-            zone_id: zone_id 
+            zone_id: zone_id ,
+            _wpnonce: csmfw_shipping.nonce
         }, function(response){
             if(response.success){
                 var options = '';

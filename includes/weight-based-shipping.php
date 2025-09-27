@@ -20,10 +20,10 @@ add_action('woocommerce_shipping_init', function () {
         public function __construct($instance_id = 0) {
             $this->id = 'ta_category_weight';
             $this->instance_id = absint($instance_id);
-            $this->method_title = __('Category Weight Rate', 'ta-cat-weight');
-            $this->method_description = __('Charge per kg for items that belong to selected categories. Cost = ceil(kg) × (base + per_kg).', 'ta-cat-weight');
+            $this->method_title = __('Category Weight Rate', 'custom-shipping-manager-for-woocommerce');
+            $this->method_description = __('Charge per kg for items that belong to selected categories. Cost = ceil(kg) × (base + per_kg).', 'custom-shipping-manager-for-woocommerce');
             $this->supports = ['shipping-zones', 'instance-settings', 'instance-settings-modal'];
-            $this->title = __('Weight-based Shipping', 'ta-cat-weight');
+            $this->title = __('Weight-based Shipping', 'custom-shipping-manager-for-woocommerce');
             $this->tax_status = 'none';
             $this->init();
         }
@@ -53,32 +53,32 @@ add_action('woocommerce_shipping_init', function () {
 
             return [
                 'title' => [
-                    'title' => __('Method title', 'woocommerce'),
+                    'title' => __('Method title', 'custom-shipping-manager-for-woocommerce'),
                     'type' => 'text',
-                    'description' => __('Shown to customers at checkout.', 'woocommerce'),
-                    'default' => __('Weight-based Shipping', 'ta-cat-weight'),
+                    'description' => __('Shown to customers at checkout.', 'custom-shipping-manager-for-woocommerce'),
+                    'default' => __('Weight-based Shipping', 'custom-shipping-manager-for-woocommerce'),
                     'desc_tip' => true,
                 ],
                 'ta_allowed_product_cats' => [
-                    'title' => __('Product categories (applies to)', 'ta-cat-weight'),
+                    'title' => __('Product categories (applies to)', 'custom-shipping-manager-for-woocommerce'),
                     'type' => 'multiselect',
-                    'description' => __('This method appears and charges only for cart items in these categories.', 'ta-cat-weight'),
+                    'description' => __('This method appears and charges only for cart items in these categories.', 'custom-shipping-manager-for-woocommerce'),
                     'options' => $options,
                     'default' => [],
                     'class' => 'wc-enhanced-select',
                     'desc_tip' => true,
                 ],
                 'base_cost' => [
-                    'title' => __('Base price (per kg)', 'ta-cat-weight'),
+                    'title' => __('Base price (per kg)', 'custom-shipping-manager-for-woocommerce'),
                     'type' => 'price',
-                    'description' => __('Fixed amount per kg (e.g., 10).', 'ta-cat-weight'),
+                    'description' => __('Fixed amount per kg (e.g., 10).', 'custom-shipping-manager-for-woocommerce'),
                     'default' => '10',
                     'desc_tip' => true,
                 ],
                 'per_kg' => [
-                    'title' => __('Additional per kg', 'ta-cat-weight'),
+                    'title' => __('Additional per kg', 'custom-shipping-manager-for-woocommerce'),
                     'type' => 'price',
-                    'description' => __('Extra amount per kg (e.g., 5).', 'ta-cat-weight'),
+                    'description' => __('Extra amount per kg (e.g., 5).', 'custom-shipping-manager-for-woocommerce'),
                     'default' => '5',
                     'desc_tip' => true,
                 ],
@@ -143,7 +143,8 @@ add_action('woocommerce_shipping_init', function () {
 
 // Select2 load for shipping settings
 add_action('admin_enqueue_scripts', function($hook){
-    if (isset($_GET['page'], $_GET['tab']) && $_GET['page'] === 'wc-settings' && $_GET['tab'] === 'shipping'){
+    $screen = get_current_screen();
+    if ( $screen && $screen->id === 'woocommerce_page_wc-settings' ) {
         wp_enqueue_script('select2');
         wp_enqueue_style('select2');
         add_action('admin_print_footer_scripts', function(){
@@ -154,7 +155,7 @@ add_action('admin_enqueue_scripts', function($hook){
                     $('select.wc-enhanced-select').each(function(){
                         if (!$(this).hasClass('select2-hidden-accessible')) {
                             $(this).select2({
-                                placeholder: '<?php echo esc_js(__( "Select categories", "ta-cat-weight" )); ?>',
+                                placeholder: '<?php echo esc_js(__( "Select categories", "custom-shipping-manager-for-woocommerce" )); ?>',
                                 allowClear: true,
                                 width: '100%'
                             });

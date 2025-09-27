@@ -33,7 +33,7 @@ add_action('before_woocommerce_init', function () {
 if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
     final class CSMFW_Custom_Shipping_States_For_Woo {
         private static $instance = null;
-
+        const CSMFW_VERSION = '1.0.0';
         public static function instance() {
             if (self::$instance === null) {
                 self::$instance = new self();

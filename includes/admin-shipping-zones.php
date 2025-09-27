@@ -19,7 +19,11 @@ class CSMFW_Admin_Shipping_Zones {
 
     // Admin settings page
     public function shipping_zone_settings_page() {
-        if (!isset($_GET['section']) || $_GET['section'] !== 'csmfw_custom_zones') return;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check, no action taken
+        $section = isset($_GET['section']) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '';
+        if ( $section !== 'csmfw_custom_zones' ) {
+            return;
+        }
 
         $zones = $this->get_static_zones_from_states();
 
@@ -62,11 +66,23 @@ class CSMFW_Admin_Shipping_Zones {
 
     // Save zones
     public function save_shipping_zones() {
-        if (!isset($_GET['section']) || $_GET['section'] !== 'csmfw_custom_zones') return;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only, just checking section
+        $section = isset($_GET['section']) ? sanitize_text_field( wp_unslash($_GET['section']) ) : '';
+        if ( $section !== 'csmfw_custom_zones' ) {
+            return;
+        }
+
+            // ✅ Verify nonce before processing POST
+        if (
+            ! isset($_POST['_wpnonce'])
+            || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-settings' )
+        ) {
+            return;
+        }
 
         if (isset($_POST['csmfw_shipping_zone_name']) && isset($_POST['csmfw_shipping_zone_regions'])) {
-            $zone_name = sanitize_text_field($_POST['csmfw_shipping_zone_name']);
-            $zone_regions = array_map('sanitize_text_field', $_POST['csmfw_shipping_zone_regions']);
+            $zone_name   = sanitize_text_field( wp_unslash( $_POST['csmfw_shipping_zone_name'] ) );
+            $zone_regions = array_map( 'sanitize_text_field', wp_unslash( $_POST['csmfw_shipping_zone_regions'] ) );
             $zones = WC_Shipping_Zones::get_zones();
             $zone_exists = false;
 
@@ -82,7 +98,14 @@ class CSMFW_Admin_Shipping_Zones {
                 $new_zone->set_zone_name($zone_name);
 
                 foreach ($zone_regions as $state_name) {
-                    $state_post = get_page_by_title($state_name, OBJECT, 'csmfw_state');
+                    $state_query = new WP_Query([
+                        'post_type'      => 'csmfw_state',
+                        'title'          => $state_name,
+                        'posts_per_page' => 1,
+                        'post_status'    => 'publish',
+                    ]);
+
+                    $state_post = $state_query->have_posts() ? $state_query->posts[0] : null;
 
                     if ($state_post) {
                         $country_code = get_post_meta($state_post->ID, 'country_code', true);
@@ -108,26 +131,42 @@ class CSMFW_Admin_Shipping_Zones {
         wp_enqueue_script('select2');
         wp_enqueue_style('select2');
 
-        wp_enqueue_script('csmfw-shipping-js', plugin_dir_url(__FILE__) . '../js/custom-shipping-zones.js', ['jquery'], false, true);
+        wp_enqueue_script('csmfw-shipping-js', plugin_dir_url(__FILE__) . '../js/custom-shipping-zones.js', ['jquery'], CSMFW_Custom_Shipping_States_For_Woo::CSMFW_VERSION, true);
 
         wp_localize_script('csmfw-shipping-js', 'csmfw_shipping', [
             'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce'    => wp_create_nonce('csmfw_get_zone_regions'),
         ]);
     }
 
     // AJAX: get regions for selected zone
     public function ajax_get_zone_regions() {
-        if (!isset($_POST['zone_id'])) wp_send_json_error();
-
-        $zone_id = sanitize_text_field($_POST['zone_id']);
-        $zones = $this->get_static_zones_from_states();
-
-        if (isset($zones[$zone_id])) {
-            $regions = $zones[$zone_id]['regions'];
-            wp_send_json_success($regions);
+        // ✅ Nonce verify (AJAX security)
+        if (
+            ! isset($_POST['_wpnonce']) ||
+            ! wp_verify_nonce(
+                sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ),
+                'csmfw_get_zone_regions'
+            )
+        ) {
+            wp_send_json_error( [ 'message' => __( 'Security check failed.', 'custom-shipping-manager-for-woocommerce' ) ] );
         }
 
-        wp_send_json_error();
+        // ✅ Safe read zone_id
+        if ( ! isset( $_POST['zone_id'] ) ) {
+            wp_send_json_error( [ 'message' => __( 'Missing zone ID.', 'custom-shipping-manager-for-woocommerce' ) ] );
+        }
+
+        $zone_id = sanitize_text_field( wp_unslash( $_POST['zone_id'] ) );
+
+        $zones = $this->get_static_zones_from_states();
+
+        if ( isset( $zones[ $zone_id ] ) ) {
+            $regions = $zones[ $zone_id ]['regions'];
+            wp_send_json_success( $regions );
+        }
+
+        wp_send_json_error( [ 'message' => __( 'Invalid zone.', 'custom-shipping-manager-for-woocommerce' ) ] );
     }
 
     // Generate dynamic zones from custom states CPT

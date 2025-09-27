@@ -6,7 +6,7 @@
  * Version: 1.0.0
  * Requires Plugins: woocommerce
  * Author: Turbo Addons
- * Author URI: https://turbo-addons.com
+ * Author URI: https://wp-turbo.com
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: custom-shipping-manager-for-woocommerce

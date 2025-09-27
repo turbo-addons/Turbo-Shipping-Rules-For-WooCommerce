@@ -1,5 +1,5 @@
 === Custom Shipping Manager for WooCommerce ===
-Contributors: TurboAddons, wpanik
+Contributors: turboaddons, wpanik
 Tags: woocommerce shipping, custom shipping states, advanced shipping methods, woocommerce shipping manager, flexible shipping zones
 Requires at least: 5.4
 Tested up to: 6.8

@@ -31,6 +31,7 @@ if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' 
     $action = isset($_POST['action']) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
 
     if ( ! empty($_POST['state']) && is_array($_POST['state']) ) {
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- $_POST['state'] sanitized below via absint()
         $raw_state_ids = wp_unslash($_POST['state']);
         $state_ids = array_map('absint', (array)$raw_state_ids);
 

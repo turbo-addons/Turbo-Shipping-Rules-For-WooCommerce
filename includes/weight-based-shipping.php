@@ -155,7 +155,7 @@ add_action('admin_enqueue_scripts', function($hook){
                     $('select.wc-enhanced-select').each(function(){
                         if (!$(this).hasClass('select2-hidden-accessible')) {
                             $(this).select2({
-                                placeholder: '<?php echo esc_js(__( "Select categories", "custom-shipping-manager-for-woocommerce" )); ?>',
+                                placeholder: '<?php echo esc_js(__( "Select categories", "turbo-shipping-rules-for-woocommerce" )); ?>',
                                 allowClear: true,
                                 width: '100%'
                             });

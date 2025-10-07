@@ -11,7 +11,7 @@ add_action('admin_menu', function () {
             include __DIR__ . '/state-list.php';
         },
         'dashicons-location-alt',
-        56 // 👈 Appears right after WooCommerce
+        56 //Appears right after WooCommerce
     );
 
     add_submenu_page('tsrfw-states', 'Add New State', 'Add New', 'manage_options', 'tsrfw-states-add', function () {
@@ -33,5 +33,3 @@ add_action('admin_menu', function () {
     });
     
 });
-
-

@@ -16,6 +16,17 @@ if (!$post || $post->post_type !== 'tsrfw_state') {
 $message = '';
 
 if ( isset($_SERVER['REQUEST_METHOD'], $_POST['state_name']) && $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+    
+    //Added: Nonce verify before processing
+    if ( ! isset($_POST['_wpnonce']) || ! wp_verify_nonce( sanitize_key($_POST['_wpnonce']), 'tsrfw_update_state_action' ) ) {
+        wp_die( esc_html__('Security check failed.', 'turbo-shipping-rules-for-woocommerce') );
+    }
+
+    //Added: Permission check
+    if ( ! current_user_can('edit_posts') ) {
+        wp_die( esc_html__('You do not have permission to update this state.', 'turbo-shipping-rules-for-woocommerce') );
+    }
+
     $name        = sanitize_text_field( wp_unslash( $_POST['state_name'] ) );
     $code        = !empty($_POST['state_code']) ? sanitize_key($_POST['state_code']) : sanitize_key($name);
     $code        = strtoupper($code);

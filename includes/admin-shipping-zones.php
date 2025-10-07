@@ -80,6 +80,11 @@ class TSRFW_Admin_Shipping_Zones {
             return;
         }
 
+        //Added: Check user capability before making database changes
+        if ( ! current_user_can('manage_woocommerce') ) {
+            wp_die( esc_html__('You do not have permission to modify shipping zones.', 'turbo-shipping-rules-for-woocommerce') );
+        }
+
         if (isset($_POST['tsrfw_shipping_zone_name']) && isset($_POST['tsrfw_shipping_zone_regions'])) {
             $zone_name   = sanitize_text_field( wp_unslash( $_POST['tsrfw_shipping_zone_name'] ) );
             $zone_regions = array_map( 'sanitize_text_field', wp_unslash( $_POST['tsrfw_shipping_zone_regions'] ) );
@@ -141,7 +146,7 @@ class TSRFW_Admin_Shipping_Zones {
 
     // AJAX: get regions for selected zone
     public function ajax_get_zone_regions() {
-        // ✅ Nonce verify (AJAX security)
+        //Nonce verify (AJAX security)
         if (
             ! isset($_POST['_wpnonce']) ||
             ! wp_verify_nonce(
@@ -152,7 +157,12 @@ class TSRFW_Admin_Shipping_Zones {
             wp_send_json_error( [ 'message' => __( 'Security check failed.', 'turbo-shipping-rules-for-woocommerce' ) ] );
         }
 
-        // ✅ Safe read zone_id
+        //Added: Permission check for AJAX action
+        if ( ! current_user_can('manage_woocommerce') ) {
+            wp_send_json_error(['message' => __('You do not have permission to perform this action.', 'turbo-shipping-rules-for-woocommerce')]);
+        }
+
+        //Safe read zone_id
         if ( ! isset( $_POST['zone_id'] ) ) {
             wp_send_json_error( [ 'message' => __( 'Missing zone ID.', 'turbo-shipping-rules-for-woocommerce' ) ] );
         }

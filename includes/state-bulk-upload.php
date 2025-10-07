@@ -11,9 +11,14 @@ if (
     isset($_POST['_wpnonce']) &&
     wp_verify_nonce(sanitize_key($_POST['_wpnonce']), 'tsrfw_bulk_upload_action')
 ) {
+    //Added: Double-layer permission check (extra safety)
+    if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__('You do not have permission to upload states.', 'turbo-shipping-rules-for-woocommerce') );
+    }
+
     if (!empty($_FILES['csv_file']['tmp_name'])) {
 
-        // ✅ File type validation
+        //File type validation
         $allowed_mimes = ['text/csv', 'text/plain', 'application/vnd.ms-excel'];
         $file_tmp_path = sanitize_text_field($_FILES['csv_file']['tmp_name']);
         $mime = mime_content_type($file_tmp_path);
@@ -21,7 +26,7 @@ if (
         if (!in_array($mime, $allowed_mimes, true)) {
             $message = "<div class='notice notice-error is-dismissible'><p>Invalid file type. Please upload a valid CSV file.</p></div>";
         } else {
-            // ✅ Use WP_Filesystem to read file
+            //Use WP_Filesystem to read file
             global $wp_filesystem;
             if (empty($wp_filesystem)) {
                 require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -33,7 +38,7 @@ if (
             if ($file_contents === false) {
                 $message = "<div class='notice notice-error is-dismissible'><p>Failed to read the uploaded CSV file.</p></div>";
             } else {
-                // ✅ Sanitize & Normalize CSV
+                //Sanitize & Normalize CSV
                 $file_contents = preg_replace('/^\xEF\xBB\xBF/', '', $file_contents); // Remove BOM
                 $lines = preg_split('/\r\n|\r|\n/', $file_contents);
 
@@ -58,7 +63,7 @@ if (
                         continue;
                     }
 
-                    // ✅ Check for duplicate
+                    //Check for duplicate
                     $existing = new WP_Query([
                         'post_type'      => 'tsrfw_state',
                         'post_status'    => 'publish',
@@ -83,7 +88,7 @@ if (
                         continue;
                     }
 
-                    // ✅ Insert new state
+                    //Insert new state
                     $post_id = wp_insert_post([
                         'post_type'   => 'tsrfw_state',
                         'post_title'  => $name,

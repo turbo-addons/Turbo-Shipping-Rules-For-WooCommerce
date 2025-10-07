@@ -80,16 +80,36 @@ class TSRFW_States_List_Table extends WP_List_Table {
         $actions = [];
 
         if ($status === 'trash') {
-            $actions['restore'] = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&restore=' . $item->ID)) . '">Restore</a>';
-            $actions['delete']  = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&delete=' . $item->ID)) . '" onclick="return confirm(\'Delete permanently?\')">Delete Permanently</a>';
+            //Added: Nonce to Restore & Delete links
+            $restore_url = wp_nonce_url(
+                admin_url('admin.php?page=tsrfw-states&restore=' . $item->ID),
+                'tsrfw_restore_' . $item->ID
+            );
+            $delete_url = wp_nonce_url(
+                admin_url('admin.php?page=tsrfw-states&delete=' . $item->ID),
+                'tsrfw_delete_' . $item->ID
+            );
+
+            $actions['restore'] = '<a href="' . esc_url($restore_url) . '">Restore</a>';
+            $actions['delete']  = '<a href="' . esc_url($delete_url) . '" onclick="return confirm(\'Delete permanently?\')">Delete Permanently</a>';
         } else {
-            $edit_link = wp_nonce_url( admin_url( 'admin.php?page=tsrfw-states-edit&id=' . $item->ID ), 'tsrfw_edit_state_action' );
-            $actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">Edit</a>';
-            $actions['trash'] = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&trash=' . $item->ID)) . '" onclick="return confirm(\'Move to Trash?\')">Trash</a>';
+            //Added: Nonce to Trash link
+            $edit_link = wp_nonce_url(
+                admin_url('admin.php?page=tsrfw-states-edit&id=' . $item->ID),
+                'tsrfw_edit_state_action'
+            );
+            $trash_url = wp_nonce_url(
+                admin_url('admin.php?page=tsrfw-states&trash=' . $item->ID),
+                'tsrfw_trash_' . $item->ID
+            );
+
+            $actions['edit'] = '<a href="' . esc_url($edit_link) . '">Edit</a>';
+            $actions['trash'] = '<a href="' . esc_url($trash_url) . '" onclick="return confirm(\'Move to Trash?\')">Trash</a>';
         }
 
         return sprintf('%1$s %2$s', esc_html($item->post_title), $this->row_actions($actions));
     }
+
 
     public function column_state_code($item) {
         return esc_html(get_post_meta($item->ID, 'state_code', true));

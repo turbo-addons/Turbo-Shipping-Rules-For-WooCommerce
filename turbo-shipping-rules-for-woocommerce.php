@@ -19,7 +19,7 @@
 
 if (!defined('ABSPATH')) exit;
 
-// ✅ HPOS compatibility declaration.
+//HPOS compatibility declaration.
 add_action('before_woocommerce_init', function () {
     if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
@@ -56,7 +56,7 @@ if (!class_exists('TSRFW_Shipping_Rules_For_Woo')) {
 
             // **New file for custom shipping zones**
             require_once plugin_dir_path(__FILE__) . 'includes/admin-shipping-zones.php';
-             // ✅ New: include Weight Based Shipping
+             //New: include Weight Based Shipping
             require_once plugin_dir_path(__FILE__) . 'includes/weight-based-shipping.php';
 
             add_filter('woocommerce_states', [$this, 'safe_merge_custom_states'], 20);

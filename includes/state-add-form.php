@@ -1,8 +1,17 @@
 <?php
 if (!defined('ABSPATH')) exit;
 $message = '';
+//Added: Restrict page access to admin users only
+if ( ! current_user_can('manage_options') ) {
+    wp_die( esc_html__('You do not have permission to access this page.', 'turbo-shipping-rules-for-woocommerce') );
+}
 
 if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_wpnonce']) && wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'tsrfw_add_state_action' ) ) {
+
+    //Added: Double-layer permission check before processing POST request
+    if ( ! current_user_can('manage_options') ) {
+        wp_die( esc_html__('You do not have permission to add new states.', 'turbo-shipping-rules-for-woocommerce') );
+    }
 
     $name        = isset($_POST['state_name']) ? sanitize_text_field( wp_unslash( $_POST['state_name'] ) ) : '';
     $code        = !empty($_POST['state_code']) ? sanitize_key( wp_unslash( $_POST['state_code'] ) ) : sanitize_key( $name );

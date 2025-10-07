@@ -9,7 +9,7 @@ if (
     isset($_SERVER['REQUEST_METHOD']) &&
     $_SERVER['REQUEST_METHOD'] === 'POST' &&
     isset($_POST['_wpnonce']) &&
-    wp_verify_nonce(sanitize_key($_POST['_wpnonce']), 'csmfw_bulk_upload_action')
+    wp_verify_nonce(sanitize_key($_POST['_wpnonce']), 'tsrfw_bulk_upload_action')
 ) {
     if (!empty($_FILES['csv_file']['tmp_name'])) {
 
@@ -60,7 +60,7 @@ if (
 
                     // ✅ Check for duplicate
                     $existing = new WP_Query([
-                        'post_type'      => 'csmfw_state',
+                        'post_type'      => 'tsrfw_state',
                         'post_status'    => 'publish',
                         // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- This query runs on a small dataset, acceptable here.
                         'meta_query'     => [
@@ -85,7 +85,7 @@ if (
 
                     // ✅ Insert new state
                     $post_id = wp_insert_post([
-                        'post_type'   => 'csmfw_state',
+                        'post_type'   => 'tsrfw_state',
                         'post_title'  => $name,
                         'post_status' => 'publish',
                     ]);
@@ -116,7 +116,7 @@ if (
     <?php echo wp_kses_post($message); ?>
 
     <form method="post" enctype="multipart/form-data">
-        <?php wp_nonce_field('csmfw_bulk_upload_action'); ?>
+        <?php wp_nonce_field('tsrfw_bulk_upload_action'); ?>
 
         <table class="form-table">
             <tr>

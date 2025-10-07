@@ -1,6 +1,6 @@
-=== Custom Shipping Manager for WooCommerce ===
+=== TURBO - Shipping Rules for WooCommerce ===
 Contributors: turboaddons, wpanik
-Tags: woocommerce shipping, custom shipping states, advanced shipping methods, woocommerce shipping manager, flexible shipping zones
+Tags: woocommerce shipping, shipping rules, custom shipping, weight based shipping, shipping zones
 Requires at least: 5.4
 Tested up to: 6.8
 Requires PHP: 7.2
@@ -14,7 +14,7 @@ Manage WooCommerce shipping with custom states and weight-based methods filtered
 
 == Description ==
 
-**Custom Shipping Manager for WooCommerce** allows you to define and manage custom state (or district) options and create flexible shipping methods (weight-based with product category filters) for any country in WooCommerce checkout forms.
+**TURBO - Shipping Rules for WooCommerce** allows you to define and manage custom state (or district) options and create flexible shipping methods (weight-based with product category filters) for any country in WooCommerce checkout forms.
 
 This is especially useful if your business operates in regions that are not covered by WooCommerce's default state lists — such as custom districts in Bangladesh, provinces in African countries, or extra regions within the United States — and also requires advanced shipping methods based on weight and product categories.
 
@@ -81,4 +81,4 @@ No. You can add unlimited custom states and create as many shipping methods as n
 
 == License ==
 
-Custom Shipping Manager for WooCommerce is licensed under the [GNU GPL v2 or later](https://www.gnu.org/licenses/gpl-2.0.html).
+TURBO - Shipping Rules for WooCommerce is licensed under the [GNU GPL v2 or later](https://www.gnu.org/licenses/gpl-2.0.html).

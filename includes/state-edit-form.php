@@ -2,14 +2,14 @@
 if (!defined('ABSPATH')) exit;
 if (
     !isset($_GET['id'], $_GET['_wpnonce']) ||
-    !wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'csmfw_edit_state_action' ) ||
+    !wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'tsrfw_edit_state_action' ) ||
     !($post_id = absint($_GET['id']))
 ) {
     wp_die('Invalid request.');
 }
 
 $post = get_post($post_id);
-if (!$post || $post->post_type !== 'csmfw_state') {
+if (!$post || $post->post_type !== 'tsrfw_state') {
     wp_die('State not found.');
 }
 
@@ -24,7 +24,7 @@ if ( isset($_SERVER['REQUEST_METHOD'], $_POST['state_name']) && $_SERVER['REQUES
 
     // Check if another state exists with same code in the same country
     $existing = new WP_Query([
-        'post_type'      => 'csmfw_state',
+        'post_type'      => 'tsrfw_state',
         'post_status'    => 'publish',
         // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Acceptable for small dataset of custom states.
         'meta_query'     => [
@@ -58,9 +58,9 @@ if ( isset($_SERVER['REQUEST_METHOD'], $_POST['state_name']) && $_SERVER['REQUES
         update_post_meta($post_id, 'custom_zone', $custom_zone); // <-- preserve comments, added custom zone
 
         $redirect_url = add_query_arg([
-            'page'      => 'csmfw-states',
+            'page'      => 'tsrfw-states',
             'updated'   => 1,
-            '_wpnonce'  => wp_create_nonce('csmfw_notice_nonce'),
+            '_wpnonce'  => wp_create_nonce('tsrfw_notice_nonce'),
         ], admin_url('admin.php'));
 
         wp_redirect( $redirect_url );
@@ -81,7 +81,7 @@ $countries    = $wc_countries->get_countries();
     <h1>Edit Shipping State</h1>
     <?php echo esc_html( $message ); ?>
     <form method="post">
-        <?php wp_nonce_field( 'csmfw_update_state_action' ); ?>
+        <?php wp_nonce_field( 'tsrfw_update_state_action' ); ?>
         <table class="form-table">
             
             <tr>

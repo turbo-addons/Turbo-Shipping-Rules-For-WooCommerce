@@ -20,10 +20,10 @@ add_action('woocommerce_shipping_init', function () {
         public function __construct($instance_id = 0) {
             $this->id = 'ta_category_weight';
             $this->instance_id = absint($instance_id);
-            $this->method_title = __('Category Weight Rate', 'custom-shipping-manager-for-woocommerce');
-            $this->method_description = __('Charge per kg for items that belong to selected categories. Cost = ceil(kg) × (base + per_kg).', 'custom-shipping-manager-for-woocommerce');
+            $this->method_title = __('Category Weight Rate', 'turbo-shipping-rules-for-woocommerce');
+            $this->method_description = __('Charge per kg for items that belong to selected categories. Cost = ceil(kg) × (base + per_kg).', 'turbo-shipping-rules-for-woocommerce');
             $this->supports = ['shipping-zones', 'instance-settings', 'instance-settings-modal'];
-            $this->title = __('Weight-based Shipping', 'custom-shipping-manager-for-woocommerce');
+            $this->title = __('Weight-based Shipping', 'turbo-shipping-rules-for-woocommerce');
             $this->tax_status = 'none';
             $this->init();
         }
@@ -53,32 +53,32 @@ add_action('woocommerce_shipping_init', function () {
 
             return [
                 'title' => [
-                    'title' => __('Method title', 'custom-shipping-manager-for-woocommerce'),
+                    'title' => __('Method title', 'turbo-shipping-rules-for-woocommerce'),
                     'type' => 'text',
-                    'description' => __('Shown to customers at checkout.', 'custom-shipping-manager-for-woocommerce'),
-                    'default' => __('Weight-based Shipping', 'custom-shipping-manager-for-woocommerce'),
+                    'description' => __('Shown to customers at checkout.', 'turbo-shipping-rules-for-woocommerce'),
+                    'default' => __('Weight-based Shipping', 'turbo-shipping-rules-for-woocommerce'),
                     'desc_tip' => true,
                 ],
                 'ta_allowed_product_cats' => [
-                    'title' => __('Product categories (applies to)', 'custom-shipping-manager-for-woocommerce'),
+                    'title' => __('Product categories (applies to)', 'turbo-shipping-rules-for-woocommerce'),
                     'type' => 'multiselect',
-                    'description' => __('This method appears and charges only for cart items in these categories.', 'custom-shipping-manager-for-woocommerce'),
+                    'description' => __('This method appears and charges only for cart items in these categories.', 'turbo-shipping-rules-for-woocommerce'),
                     'options' => $options,
                     'default' => [],
                     'class' => 'wc-enhanced-select',
                     'desc_tip' => true,
                 ],
                 'base_cost' => [
-                    'title' => __('Base price (per kg)', 'custom-shipping-manager-for-woocommerce'),
+                    'title' => __('Base price (per kg)', 'turbo-shipping-rules-for-woocommerce'),
                     'type' => 'price',
-                    'description' => __('Fixed amount per kg (e.g., 10).', 'custom-shipping-manager-for-woocommerce'),
+                    'description' => __('Fixed amount per kg (e.g., 10).', 'turbo-shipping-rules-for-woocommerce'),
                     'default' => '10',
                     'desc_tip' => true,
                 ],
                 'per_kg' => [
-                    'title' => __('Additional per kg', 'custom-shipping-manager-for-woocommerce'),
+                    'title' => __('Additional per kg', 'turbo-shipping-rules-for-woocommerce'),
                     'type' => 'price',
-                    'description' => __('Extra amount per kg (e.g., 5).', 'custom-shipping-manager-for-woocommerce'),
+                    'description' => __('Extra amount per kg (e.g., 5).', 'turbo-shipping-rules-for-woocommerce'),
                     'default' => '5',
                     'desc_tip' => true,
                 ],

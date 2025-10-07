@@ -2,7 +2,7 @@ jQuery(document).ready(function($){
 
     // Function to populate regions
     function populate_regions(zone_id){
-        var $regions = $('#csmfw_shipping_zone_regions');
+        var $regions = $('#tsrfw_shipping_zone_regions');
         
         // Clear previous selection
         $regions.val(null).trigger('change');
@@ -14,10 +14,10 @@ jQuery(document).ready(function($){
         $regions.prop('disabled', false);
 
         // Ajax call to get regions
-        $.post(csmfw_shipping.ajax_url, { 
-            action: 'csmfw_get_zone_regions', 
+        $.post(tsrfw_shipping.ajax_url, { 
+            action: 'tsrfw_get_zone_regions', 
             zone_id: zone_id ,
-            _wpnonce: csmfw_shipping.nonce
+            _wpnonce: tsrfw_shipping.nonce
         }, function(response){
             if(response.success){
                 var options = '';
@@ -30,17 +30,17 @@ jQuery(document).ready(function($){
     }
 
     // On change of zone dropdown
-    $('#csmfw_shipping_zone_name').on('change', function(){
+    $('#tsrfw_shipping_zone_name').on('change', function(){
         var zone_id = $(this).val();
         populate_regions(zone_id);
     });
 
     // Trigger initially for default selected
-    var initial_zone = $('#csmfw_shipping_zone_name').val();
+    var initial_zone = $('#tsrfw_shipping_zone_name').val();
     populate_regions(initial_zone);
 
     // Initialize select2 for multiselect
-    $('#csmfw_shipping_zone_regions').select2({
+    $('#tsrfw_shipping_zone_regions').select2({
         width: '40%',
         placeholder: 'Select regions'
     });

@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) exit;
 add_action('init', function () {
-    register_post_type('csmfw_state', [
+    register_post_type('tsrfw_state', [
         'labels' => [
             'name'          => 'Shipping States',
             'singular_name' => 'Shipping State',

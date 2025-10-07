@@ -2,7 +2,7 @@
 if (!defined('ABSPATH')) exit;
 $message = '';
 
-if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_wpnonce']) && wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'csmfw_add_state_action' ) ) {
+if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_wpnonce']) && wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'tsrfw_add_state_action' ) ) {
 
     $name        = isset($_POST['state_name']) ? sanitize_text_field( wp_unslash( $_POST['state_name'] ) ) : '';
     $code        = !empty($_POST['state_code']) ? sanitize_key( wp_unslash( $_POST['state_code'] ) ) : sanitize_key( $name );
@@ -12,7 +12,7 @@ if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' 
 
     // Check for duplicate: same state code + country
     $existing = new WP_Query([
-        'post_type'      => 'csmfw_state',
+        'post_type'      => 'tsrfw_state',
         'post_status'    => 'publish',
         // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
         'meta_query'     => [
@@ -34,7 +34,7 @@ if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' 
         $message = '<div class="notice notice-error is-dismissible"><p>State with this code already exists in this country.</p></div>';
     } else {
         $post_id = wp_insert_post([
-            'post_type'   => 'csmfw_state',
+            'post_type'   => 'tsrfw_state',
             'post_title'  => $name,
             'post_status' => 'publish',
         ]);
@@ -45,9 +45,9 @@ if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' 
         update_post_meta($post_id, 'custom_zone', $custom_zone); // <-- new field
 
         $redirect_url = add_query_arg([
-            'page'     => 'csmfw-states',
+            'page'     => 'tsrfw-states',
             'added'    => 1,
-            '_wpnonce' => wp_create_nonce('csmfw_notice_nonce'),
+            '_wpnonce' => wp_create_nonce('tsrfw_notice_nonce'),
         ], admin_url('admin.php'));
 
         wp_redirect( $redirect_url );
@@ -64,7 +64,7 @@ $countries    = $wc_countries->get_countries();
     <h1>Add New Shipping State</h1>
     <?php echo esc_html( $message ); ?>
     <form method="post">
-        <?php wp_nonce_field( 'csmfw_add_state_action' ); ?>
+        <?php wp_nonce_field( 'tsrfw_add_state_action' ); ?>
         <table class="form-table">
             
             <tr>
@@ -89,7 +89,10 @@ $countries    = $wc_countries->get_countries();
                 <th><label for="state_code">State Code (Optional)</label></th>
                 <td>
                     <input type="text" name="state_code" id="state_code">
-                    <p class="description">If left blank, code will be generated from the state name.</p>
+                    <p class="description">
+                        If left blank, the code will be generated automatically from the state name. 
+                        Do not use special characters or spaces when entering a custom state code.
+                    </p>
                 </td>
             </tr>
 

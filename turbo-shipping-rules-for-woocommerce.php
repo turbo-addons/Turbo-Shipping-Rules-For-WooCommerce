@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Custom Shipping Manager for WooCommerce
- * Plugin URI: https://wp-turbo.com/custom-shipping-manager-for-woocommerce/
+ * Plugin Name: TURBO - Shipping Rules for WooCommerce
+ * Plugin URI: https://turbo-addons.com/turbo-shipping-rules-for-woocommerce/
  * Description: Easily manage WooCommerce shipping with custom states (inside city, outside city, intercity) and advanced weight-based shipping methods filtered by product categories. Fast, simple, and powerful shipping manager for WooCommerce.
  * Version: 1.0.0
  * Requires Plugins: woocommerce
  * Author: Turbo Addons
- * Author URI: https://wp-turbo.com
+ * Author URI: https://turbo-addons.com
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: custom-shipping-manager-for-woocommerce
+ * Text Domain: turbo-shipping-rules-for-woocommerce
  * Requires at least: 5.4
  * Requires PHP: 7.2
  * Tested up to: 6.5
@@ -30,10 +30,10 @@ add_action('before_woocommerce_init', function () {
     }
 });
 
-if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
-    final class CSMFW_Custom_Shipping_States_For_Woo {
+if (!class_exists('TSRFW_Shipping_Rules_For_Woo')) {
+    final class TSRFW_Shipping_Rules_For_Woo {
         private static $instance = null;
-        const CSMFW_VERSION = '1.0.0';
+        const TSRFW_VERSION = '1.0.0';
         public static function instance() {
             if (self::$instance === null) {
                 self::$instance = new self();
@@ -64,7 +64,7 @@ if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
 
         public function admin_notice_missing_wc() {
             echo '<div class="notice notice-error"><p>';
-            esc_html_e('Custom Shipping Manager for WooCommerce requires WooCommerce to be installed and active.', 'custom-shipping-manager-for-woocommerce');
+            esc_html_e('Custom Shipping Manager for WooCommerce requires WooCommerce to be installed and active.', 'turbo-shipping-rules-for-woocommerce');
             echo '</p></div>';
         }
 
@@ -75,7 +75,7 @@ if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
             }
 
             $query = new WP_Query([
-                'post_type'      => 'csmfw_state',
+                'post_type'      => 'tsrfw_state',
                 'post_status'    => 'publish',
                 'posts_per_page' => -1,
                 'fields'         => 'ids', 
@@ -101,7 +101,7 @@ if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
             $zones = [];
 
             $query = new WP_Query([
-                'post_type'      => 'csmfw_state',
+                'post_type'      => 'tsrfw_state',
                 'post_status'    => 'publish',
                 'posts_per_page' => -1,
             ]);
@@ -131,5 +131,5 @@ if (!class_exists('CSMFW_Custom_Shipping_States_For_Woo')) {
 
     }
 
-    CSMFW_Custom_Shipping_States_For_Woo::instance();
+    TSRFW_Shipping_Rules_For_Woo::instance();
 }

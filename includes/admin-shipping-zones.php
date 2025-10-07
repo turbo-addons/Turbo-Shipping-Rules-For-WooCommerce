@@ -1,19 +1,19 @@
 <?php
 if (!defined('ABSPATH')) exit;
 
-class CSMFW_Admin_Shipping_Zones {
+class TSRFW_Admin_Shipping_Zones {
 
     public function __construct() {
         add_filter('woocommerce_get_sections_shipping', [$this, 'add_shipping_section']);
         add_action('woocommerce_settings_shipping', [$this, 'shipping_zone_settings_page']);
         add_action('woocommerce_update_options_shipping', [$this, 'save_shipping_zones']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
-        add_action('wp_ajax_csmfw_get_zone_regions', [$this, 'ajax_get_zone_regions']);
+        add_action('wp_ajax_tsrfw_get_zone_regions', [$this, 'ajax_get_zone_regions']);
     }
 
     // Add shipping section
     public function add_shipping_section($sections) {
-        $sections['csmfw_custom_zones'] = __('Custom Shipping Zones', 'custom-shipping-manager-for-woocommerce');
+        $sections['tsrfw_custom_zones'] = __('Custom Shipping Zones', 'turbo-shipping-rules-for-woocommerce');
         return $sections;
     }
 
@@ -21,7 +21,7 @@ class CSMFW_Admin_Shipping_Zones {
     public function shipping_zone_settings_page() {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check, no action taken
         $section = isset($_GET['section']) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '';
-        if ( $section !== 'csmfw_custom_zones' ) {
+        if ( $section !== 'tsrfw_custom_zones' ) {
             return;
         }
 
@@ -34,30 +34,30 @@ class CSMFW_Admin_Shipping_Zones {
 
         $settings = [
             [
-                'title' => __('Custom Shipping Zones', 'custom-shipping-manager-for-woocommerce'),
+                'title' => __('Custom Shipping Zones', 'turbo-shipping-rules-for-woocommerce'),
                 'type'  => 'title',
-                'id'    => 'csmfw_custom_zones_title',
+                'id'    => 'tsrfw_custom_zones_title',
             ],
             [
-                'title'       => __('Shipping Zone Name', 'custom-shipping-manager-for-woocommerce'),
+                'title'       => __('Shipping Zone Name', 'turbo-shipping-rules-for-woocommerce'),
                 'type'        => 'select',
-                'id'          => 'csmfw_shipping_zone_name',
+                'id'          => 'tsrfw_shipping_zone_name',
                 'options'     => ['' => '-- Select Your Zone --'] + $zone_options,
                 'desc_tip'    => true,
-                'description' => __('Select a Shipping Zone.', 'custom-shipping-manager-for-woocommerce'),
+                'description' => __('Select a Shipping Zone.', 'turbo-shipping-rules-for-woocommerce'),
             ],
             [
-                'title'       => __('Zone Regions', 'custom-shipping-manager-for-woocommerce'),
+                'title'       => __('Zone Regions', 'turbo-shipping-rules-for-woocommerce'),
                 'type'        => 'multiselect',
-                'id'          => 'csmfw_shipping_zone_regions',
+                'id'          => 'tsrfw_shipping_zone_regions',
                 'options'     => [], // populated via JS
                 'desc_tip'    => true,
-                'description' => __('Select regions for this zone.', 'custom-shipping-manager-for-woocommerce'),
+                'description' => __('Select regions for this zone.', 'turbo-shipping-rules-for-woocommerce'),
                 'class'       => 'wc-enhanced-select',
             ],
             [
                 'type' => 'sectionend',
-                'id'   => 'csmfw_custom_zones_section_end',
+                'id'   => 'tsrfw_custom_zones_section_end',
             ],
         ];
 
@@ -68,7 +68,7 @@ class CSMFW_Admin_Shipping_Zones {
     public function save_shipping_zones() {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only, just checking section
         $section = isset($_GET['section']) ? sanitize_text_field( wp_unslash($_GET['section']) ) : '';
-        if ( $section !== 'csmfw_custom_zones' ) {
+        if ( $section !== 'tsrfw_custom_zones' ) {
             return;
         }
 
@@ -80,9 +80,9 @@ class CSMFW_Admin_Shipping_Zones {
             return;
         }
 
-        if (isset($_POST['csmfw_shipping_zone_name']) && isset($_POST['csmfw_shipping_zone_regions'])) {
-            $zone_name   = sanitize_text_field( wp_unslash( $_POST['csmfw_shipping_zone_name'] ) );
-            $zone_regions = array_map( 'sanitize_text_field', wp_unslash( $_POST['csmfw_shipping_zone_regions'] ) );
+        if (isset($_POST['tsrfw_shipping_zone_name']) && isset($_POST['tsrfw_shipping_zone_regions'])) {
+            $zone_name   = sanitize_text_field( wp_unslash( $_POST['tsrfw_shipping_zone_name'] ) );
+            $zone_regions = array_map( 'sanitize_text_field', wp_unslash( $_POST['tsrfw_shipping_zone_regions'] ) );
             $zones = WC_Shipping_Zones::get_zones();
             $zone_exists = false;
 
@@ -99,7 +99,7 @@ class CSMFW_Admin_Shipping_Zones {
 
                 foreach ($zone_regions as $state_name) {
                     $state_query = new WP_Query([
-                        'post_type'      => 'csmfw_state',
+                        'post_type'      => 'tsrfw_state',
                         'title'          => $state_name,
                         'posts_per_page' => 1,
                         'post_status'    => 'publish',
@@ -131,11 +131,11 @@ class CSMFW_Admin_Shipping_Zones {
         wp_enqueue_script('select2');
         wp_enqueue_style('select2');
 
-        wp_enqueue_script('csmfw-shipping-js', plugin_dir_url(__FILE__) . '../js/custom-shipping-zones.js', ['jquery'], CSMFW_Custom_Shipping_States_For_Woo::CSMFW_VERSION, true);
+        wp_enqueue_script('tsrfw-shipping-js', plugin_dir_url(__FILE__) . '../js/custom-shipping-zones.js', ['jquery'], TSRFW_Shipping_Rules_For_Woo::TSRFW_VERSION, true);
 
-        wp_localize_script('csmfw-shipping-js', 'csmfw_shipping', [
+        wp_localize_script('tsrfw-shipping-js', 'tsrfw_shipping', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('csmfw_get_zone_regions'),
+            'nonce'    => wp_create_nonce('tsrfw_get_zone_regions'),
         ]);
     }
 
@@ -146,15 +146,15 @@ class CSMFW_Admin_Shipping_Zones {
             ! isset($_POST['_wpnonce']) ||
             ! wp_verify_nonce(
                 sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ),
-                'csmfw_get_zone_regions'
+                'tsrfw_get_zone_regions'
             )
         ) {
-            wp_send_json_error( [ 'message' => __( 'Security check failed.', 'custom-shipping-manager-for-woocommerce' ) ] );
+            wp_send_json_error( [ 'message' => __( 'Security check failed.', 'turbo-shipping-rules-for-woocommerce' ) ] );
         }
 
         // ✅ Safe read zone_id
         if ( ! isset( $_POST['zone_id'] ) ) {
-            wp_send_json_error( [ 'message' => __( 'Missing zone ID.', 'custom-shipping-manager-for-woocommerce' ) ] );
+            wp_send_json_error( [ 'message' => __( 'Missing zone ID.', 'turbo-shipping-rules-for-woocommerce' ) ] );
         }
 
         $zone_id = sanitize_text_field( wp_unslash( $_POST['zone_id'] ) );
@@ -166,14 +166,14 @@ class CSMFW_Admin_Shipping_Zones {
             wp_send_json_success( $regions );
         }
 
-        wp_send_json_error( [ 'message' => __( 'Invalid zone.', 'custom-shipping-manager-for-woocommerce' ) ] );
+        wp_send_json_error( [ 'message' => __( 'Invalid zone.', 'turbo-shipping-rules-for-woocommerce' ) ] );
     }
 
     // Generate dynamic zones from custom states CPT
     public function get_static_zones_from_states() {
         $zones = [];
         $query = new WP_Query([
-            'post_type'      => 'csmfw_state',
+            'post_type'      => 'tsrfw_state',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
         ]);
@@ -200,4 +200,4 @@ class CSMFW_Admin_Shipping_Zones {
     }
 }
 
-new CSMFW_Admin_Shipping_Zones();
+new TSRFW_Admin_Shipping_Zones();

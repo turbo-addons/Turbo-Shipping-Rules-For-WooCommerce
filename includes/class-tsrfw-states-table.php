@@ -4,12 +4,12 @@ if (!class_exists('WP_List_Table')) {
     require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class CSMFW_States_List_Table extends WP_List_Table {
+class TSRFW_States_List_Table extends WP_List_Table {
 
     public function __construct() {
         parent::__construct([
-            'singular' => 'csmfw_state',
-            'plural'   => 'csmfw_states',
+            'singular' => 'tsrfw_state',
+            'plural'   => 'tsrfw_states',
             'ajax'     => false,
         ]);
     }
@@ -33,10 +33,10 @@ class CSMFW_States_List_Table extends WP_List_Table {
     }
 
     public function get_views() {
-        $counts = wp_count_posts('csmfw_state');
+        $counts = wp_count_posts('tsrfw_state');
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         $current_status = isset( $_GET['post_status'] ) ? sanitize_text_field( wp_unslash( $_GET['post_status'] ) ) : '';
-        $url = admin_url('admin.php?page=csmfw-states');
+        $url = admin_url('admin.php?page=tsrfw-states');
         $views = [];
 
         $views['all'] = sprintf(
@@ -80,12 +80,12 @@ class CSMFW_States_List_Table extends WP_List_Table {
         $actions = [];
 
         if ($status === 'trash') {
-            $actions['restore'] = '<a href="' . esc_url(admin_url('admin.php?page=csmfw-states&restore=' . $item->ID)) . '">Restore</a>';
-            $actions['delete']  = '<a href="' . esc_url(admin_url('admin.php?page=csmfw-states&delete=' . $item->ID)) . '" onclick="return confirm(\'Delete permanently?\')">Delete Permanently</a>';
+            $actions['restore'] = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&restore=' . $item->ID)) . '">Restore</a>';
+            $actions['delete']  = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&delete=' . $item->ID)) . '" onclick="return confirm(\'Delete permanently?\')">Delete Permanently</a>';
         } else {
-            $edit_link = wp_nonce_url( admin_url( 'admin.php?page=csmfw-states-edit&id=' . $item->ID ), 'csmfw_edit_state_action' );
+            $edit_link = wp_nonce_url( admin_url( 'admin.php?page=tsrfw-states-edit&id=' . $item->ID ), 'tsrfw_edit_state_action' );
             $actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">Edit</a>';
-            $actions['trash'] = '<a href="' . esc_url(admin_url('admin.php?page=csmfw-states&trash=' . $item->ID)) . '" onclick="return confirm(\'Move to Trash?\')">Trash</a>';
+            $actions['trash'] = '<a href="' . esc_url(admin_url('admin.php?page=tsrfw-states&trash=' . $item->ID)) . '" onclick="return confirm(\'Move to Trash?\')">Trash</a>';
         }
 
         return sprintf('%1$s %2$s', esc_html($item->post_title), $this->row_actions($actions));
@@ -123,7 +123,7 @@ class CSMFW_States_List_Table extends WP_List_Table {
         $post_status = $requested_status === 'trash' ? 'trash' : 'any';
 
         $args = [
-            'post_type'      => 'csmfw_state',
+            'post_type'      => 'tsrfw_state',
             'post_status'    => $post_status,
             'posts_per_page' => $per_page,
             'paged'          => $paged,

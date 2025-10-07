@@ -1,4 +1,4 @@
-Custom Shipping Manager for WooCommerce - WordPress Plugin
+TURBO - Shipping Rules for WooCommerce - WordPress Plugin
 Copyright (C) 2025 Turbo Addons 
 
 This program is free software; you can redistribute it and/or modify

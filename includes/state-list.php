@@ -1,9 +1,9 @@
 <?php
 if (!defined('ABSPATH')) exit;
-require_once __DIR__ . '/class-csmfw-states-table.php'; // ✅ updated class file name
+require_once __DIR__ . '/class-tsrfw-states-table.php'; // ✅ updated class file name
 
-if ( isset($_GET['added'], $_GET['_wpnonce']) && wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'csmfw_notice_nonce' )) { echo '<div class="notice notice-success is-dismissible"><p>State added successfully.</p></div>'; }
-if ( isset($_GET['updated'], $_GET['_wpnonce']) && wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'csmfw_notice_nonce' )) { echo '<div class="notice notice-success is-dismissible"><p>State updated successfully.</p></div>'; }
+if ( isset($_GET['added'], $_GET['_wpnonce']) && wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'tsrfw_notice_nonce' )) { echo '<div class="notice notice-success is-dismissible"><p>State added successfully.</p></div>'; }
+if ( isset($_GET['updated'], $_GET['_wpnonce']) && wp_verify_nonce( sanitize_key($_GET['_wpnonce']), 'tsrfw_notice_nonce' )) { echo '<div class="notice notice-success is-dismissible"><p>State updated successfully.</p></div>'; }
 
 if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' ) {
     $action = isset($_POST['action']) ? sanitize_text_field( wp_unslash( $_POST['action'] ) ) : '';
@@ -53,20 +53,20 @@ if (isset($_GET['delete']) && current_user_can('delete_posts')) {
     echo '<div class="notice notice-success is-dismissible"><p>State permanently deleted.</p></div>';
 }
 
-$csmfw_table = new CSMFW_States_List_Table(); // ✅ updated class name
-$csmfw_table->prepare_items();
+$tsrfw_table = new TSRFW_States_List_Table(); // ✅ updated class name
+$tsrfw_table->prepare_items();
 ?>
 
 <div class="wrap">
     <h1 class="wp-heading-inline">Shipping States</h1>
-        <a href="<?php echo esc_url( admin_url( 'admin.php?page=csmfw-states-add' ) ); ?>" class="page-title-action">Add New</a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=tsrfw-states-add' ) ); ?>" class="page-title-action">Add New</a>
     <form method="get">
-        <input type="hidden" name="page" value="csmfw-states" />
-        <?php $csmfw_table->views(); ?>
-        <?php $csmfw_table->search_box('Search States', 'csmfw_state'); ?>
+        <input type="hidden" name="page" value="tsrfw-states" />
+        <?php $tsrfw_table->views(); ?>
+        <?php $tsrfw_table->search_box('Search States', 'tsrfw_state'); ?>
     </form>
 
     <form method="post">
-        <?php $csmfw_table->display(); ?>
+        <?php $tsrfw_table->display(); ?>
     </form>
 </div>

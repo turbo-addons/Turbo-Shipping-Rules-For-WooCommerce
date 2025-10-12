@@ -5,20 +5,20 @@ if (!defined('ABSPATH')) exit;
  * Register method.
  */
 add_filter('woocommerce_shipping_methods', function ($methods) {
-    $methods['ta_category_weight'] = 'TA_Category_Weight_Rate';
+    $methods['tsrfw_category_weight'] = 'TSRFW_Category_Weight_Rate';
     return $methods;
 });
 
 add_action('woocommerce_shipping_init', function () {
 
-    if (class_exists('TA_Category_Weight_Rate')) return;
+    if (class_exists('TSRFW_Category_Weight_Rate')) return;
 
-    class TA_Category_Weight_Rate extends WC_Shipping_Method {
+    class TSRFW_Category_Weight_Rate extends WC_Shipping_Method {
 
         private static $instance = null;
 
         public function __construct($instance_id = 0) {
-            $this->id = 'ta_category_weight';
+            $this->id = 'tsrfw_category_weight';
             $this->instance_id = absint($instance_id);
             $this->method_title = __('Category Weight Rate', 'turbo-shipping-rules-for-woocommerce');
             $this->method_description = __('Charge per kg for items that belong to selected categories. Cost = ceil(kg) × (base + per_kg).', 'turbo-shipping-rules-for-woocommerce');
@@ -59,7 +59,7 @@ add_action('woocommerce_shipping_init', function () {
                     'default' => __('Weight-based Shipping', 'turbo-shipping-rules-for-woocommerce'),
                     'desc_tip' => true,
                 ],
-                'ta_allowed_product_cats' => [
+                'tsrfw_allowed_product_cats' => [
                     'title' => __('Product categories (applies to)', 'turbo-shipping-rules-for-woocommerce'),
                     'type' => 'multiselect',
                     'description' => __('This method appears and charges only for cart items in these categories.', 'turbo-shipping-rules-for-woocommerce'),
@@ -86,7 +86,7 @@ add_action('woocommerce_shipping_init', function () {
         }
 
         public function is_available($package) {
-            $allowed_ids = array_map('absint', (array)$this->get_option('ta_allowed_product_cats', []));
+            $allowed_ids = array_map('absint', (array)$this->get_option('tsrfw_allowed_product_cats', []));
             if (empty($allowed_ids)) return false;
 
             foreach ((array)$package['contents'] as $item) {
@@ -99,7 +99,7 @@ add_action('woocommerce_shipping_init', function () {
         }
 
         public function calculate_shipping($package = []) {
-            $allowed_ids = array_map('absint', (array)$this->get_option('ta_allowed_product_cats', []));
+            $allowed_ids = array_map('absint', (array)$this->get_option('tsrfw_allowed_product_cats', []));
             $base = floatval($this->get_option('base_cost', 0));
             $perkg = floatval($this->get_option('per_kg', 0));
 
@@ -142,31 +142,35 @@ add_action('woocommerce_shipping_init', function () {
 });
 
 // Select2 load for shipping settings
-add_action('admin_enqueue_scripts', function($hook){
+add_action('admin_enqueue_scripts', function($hook) {
+
     $screen = get_current_screen();
     if ( $screen && $screen->id === 'woocommerce_page_wc-settings' ) {
+
+        // Enqueue built-in Select2
         wp_enqueue_script('select2');
         wp_enqueue_style('select2');
-        add_action('admin_print_footer_scripts', function(){
-            ?>
-            <script type="text/javascript">
-            jQuery(function($){
-                function initSelect2() {
-                    $('select.wc-enhanced-select').each(function(){
-                        if (!$(this).hasClass('select2-hidden-accessible')) {
-                            $(this).select2({
-                                placeholder: '<?php echo esc_js(__( "Select categories", "turbo-shipping-rules-for-woocommerce" )); ?>',
-                                allowClear: true,
-                                width: '100%'
-                            });
-                        }
-                    });
-                }
-                initSelect2();
-                $(document.body).on('wc_backbone_modal_loaded', initSelect2);
-            });
-            </script>
-            <?php
-        });
+
+        // ✅ Register your admin script
+        wp_register_script(
+            'tsrfw-admin',
+            plugin_dir_url(__FILE__) . '../js/tsrfw-admin.js',
+            ['jquery', 'select2'],
+            TSRFW_Shipping_Rules_For_Woo::TSRFW_VERSION,
+            true
+        );
+
+        // Add defer (WordPress 6.3+ support)
+        wp_script_add_data('tsrfw-admin', 'strategy', 'defer');
+
+        // Pass localized data
+        wp_localize_script('tsrfw-admin', 'tsrfwAdmin', [
+            'placeholder' => esc_html__( 'Select categories', 'turbo-shipping-rules-for-woocommerce' ),
+        ]);
+
+        // ✅ Enqueue the registered script
+        wp_enqueue_script('tsrfw-admin');
     }
 });
+
+

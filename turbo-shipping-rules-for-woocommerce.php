@@ -1,20 +1,20 @@
 <?php
 /**
  * Plugin Name: TURBO - Shipping Rules for WooCommerce
- * Plugin URI: https://turbo-addons.com/turbo-shipping-rules-for-woocommerce/
+ * Plugin URI: https://wp-turbo.com/turbo-shipping-rules-for-woocommerce/
  * Description: Easily manage WooCommerce shipping with custom states (inside city, outside city, intercity) and advanced weight-based shipping methods filtered by product categories. Fast, simple, and powerful shipping manager for WooCommerce.
  * Version: 1.0.0
  * Requires Plugins: woocommerce
  * Author: Turbo Addons
- * Author URI: https://turbo-addons.com
+ * Author URI: https://wp-turbo.com/
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: turbo-shipping-rules-for-woocommerce
  * Requires at least: 5.4
  * Requires PHP: 7.2
- * Tested up to: 6.5
- * WC requires at least: 4.0
- * WC tested up to: 8.9
+ * Tested up to: 6.8
+ * WC requires at least: 6.1
+ * WC tested up to: 10.2
  */
 
 if (!defined('ABSPATH')) exit;

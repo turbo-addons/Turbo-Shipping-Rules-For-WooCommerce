@@ -1,5 +1,5 @@
 === TURBO - Shipping Rules for WooCommerce ===
-Contributors: turboaddons, wpanik
+Contributors: TurboAddons, wpanik, sharifok, siraji2017, rabiulalam01833
 Tags: woocommerce shipping, shipping rules, custom shipping, weight based shipping, shipping zones
 Requires at least: 5.4
 Tested up to: 6.8
@@ -7,8 +7,8 @@ Requires PHP: 7.2
 Stable tag: 1.0.0
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-WC requires at least: 4.0
-WC tested up to: 8.9
+WC requires at least: 6.1
+WC tested up to: 10.2
 
 Manage WooCommerce shipping with custom states and weight-based methods filtered by product categories. Fast and flexible.
 

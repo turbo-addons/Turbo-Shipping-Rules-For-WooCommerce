@@ -41,10 +41,16 @@ With a simple admin UI and seamless WooCommerce integration, your customers can 
 
 1. Admin dashboard view showing the list of custom shipping states.
 2. Form to create a new shipping state with country and code.
-3. Edit screen for updating existing shipping state details.
+3. How to ready csv file for bulk upload.
 4. Bulk CSV upload interface for adding multiple states at once.
 5. Assign your custom states to WooCommerce shipping zone regions.
-6. Final output — apply different shipping charges based on your custom states. This allows you to easily handle intercity delivery variations.
+6. Your Custom Shipping Zone
+7. Edit Zone
+8. Choose Your Custom Shipping method
+9. Add your Custom Custom Shipping Rules
+10. Save and explore the checkout page
+11. Change the distric and see the update
+12. Find the shipping state and see the update
 
 == Installation ==
 

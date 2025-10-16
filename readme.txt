@@ -16,6 +16,8 @@ Manage WooCommerce shipping with custom states and weight-based methods filtered
 
 **TURBO - Shipping Rules for WooCommerce** allows you to define and manage custom state (or district) options and create flexible shipping methods (weight-based with product category filters) for any country in WooCommerce checkout forms.
 
+https://youtu.be/D9uHYX-ktnY?si=G371PCefqgJovDrB
+
 This is especially useful if your business operates in regions that are not covered by WooCommerce's default state lists — such as custom districts in Bangladesh, provinces in African countries, or extra regions within the United States — and also requires advanced shipping methods based on weight and product categories.
 
 With a simple admin UI and seamless WooCommerce integration, your customers can now choose from precise and relevant shipping regions and shipping methods tailored to your business.

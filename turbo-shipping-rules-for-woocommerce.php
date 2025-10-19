@@ -42,7 +42,7 @@ $plugin_data = get_file_data( __FILE__, [
 
 $plugin_slug = dirname( plugin_basename( __FILE__ ) );
 
-// ✅ Initialize SDK
+// ✅ Initialize SDK if available
 if ( class_exists( 'WPPulse_SDK' ) ) {
     WPPulse_SDK::init( __FILE__, [
         'name'     => $plugin_data['Name'],

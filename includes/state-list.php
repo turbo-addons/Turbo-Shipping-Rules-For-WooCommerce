@@ -18,7 +18,8 @@ if ( isset($_GET['updated'], $_GET['_wpnonce']) && wp_verify_nonce( sanitize_key
 if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 
     //Added: Nonce verify for bulk actions
-    if ( ! isset($_POST['_wpnonce']) || ! wp_verify_nonce( sanitize_key($_POST['_wpnonce']), 'tsrfw_bulk_action' ) ) {
+    if ( empty($_POST['_wpnonce']) || 
+        ! wp_verify_nonce( sanitize_key($_POST['_wpnonce']), 'bulk-tsrfw_states' ) ) {
         wp_die( esc_html__('Security check failed.', 'turbo-shipping-rules-for-woocommerce') );
     }
 

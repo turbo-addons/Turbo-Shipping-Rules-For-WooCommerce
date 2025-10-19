@@ -4,7 +4,7 @@ Tags: woocommerce shipping, shipping rules, custom shipping, weight based shippi
 Requires at least: 5.4
 Tested up to: 6.8
 Requires PHP: 7.2
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 6.1
@@ -79,6 +79,10 @@ Yes. You can add custom states for **any country code**
 No. You can add unlimited custom states and create as many shipping methods as needed for your business.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed: Security check error when performing bulk actions (Move to Trash, Delete Permanently, Restore) in the States list table.
+* Improved: Nonce verification consistency for better security and smoother admin experience.
 
 = 1.0.0 =
 * Initial release

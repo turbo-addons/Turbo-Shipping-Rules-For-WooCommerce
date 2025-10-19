@@ -3,7 +3,7 @@
  * Plugin Name: TURBO - Shipping Rules for WooCommerce
  * Plugin URI: https://wp-turbo.com/turbo-shipping-rules-for-woocommerce/
  * Description: Easily manage WooCommerce shipping with custom states (inside city, outside city, intercity) and advanced weight-based shipping methods filtered by product categories. Fast, simple, and powerful shipping manager for WooCommerce.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires Plugins: woocommerce
  * Author: Turbo Addons
  * Author URI: https://wp-turbo.com/
@@ -30,10 +30,32 @@ add_action('before_woocommerce_init', function () {
     }
 });
 
+// ✅ Include SDK
+require_once __DIR__ . '/wppulse/wppulse-plugin-analytics-engine-sdk.php';
+
+// ✅ Fetch plugin data automatically
+$plugin_data = get_file_data( __FILE__, [
+    'Name'       => 'Plugin Name',
+    'Version'    => 'Version',
+    'TextDomain' => 'Text Domain',
+] );
+
+$plugin_slug = dirname( plugin_basename( __FILE__ ) );
+
+// ✅ Initialize SDK
+if ( class_exists( 'WPPulse_SDK' ) ) {
+    WPPulse_SDK::init( __FILE__, [
+        'name'     => $plugin_data['Name'],
+        'slug'     => $plugin_slug,
+        'version'  => $plugin_data['Version'],
+        'endpoint' => 'https://wp-turbo.com/wp-json/wppulse/v1/collect',
+    ] );
+}
+
 if (!class_exists('TSRFW_Shipping_Rules_For_Woo')) {
     final class TSRFW_Shipping_Rules_For_Woo {
         private static $instance = null;
-        const TSRFW_VERSION = '1.0.0';
+        const TSRFW_VERSION = '1.0.1';
         public static function instance() {
             if (self::$instance === null) {
                 self::$instance = new self();

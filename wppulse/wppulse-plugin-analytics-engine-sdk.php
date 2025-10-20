@@ -12,7 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * WPPulse SDK – works like Appsero SDK but fully open-source.
  */
 class WPPulse_SDK {
-
+	
+	const WPPULSE_SDKVERSION = '1.0.0';
 	private static $cfg = [];
 	private static $file = '';
 

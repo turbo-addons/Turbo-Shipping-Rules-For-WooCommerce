@@ -3,7 +3,7 @@
  * Plugin Name: TURBO - Shipping Rules for WooCommerce
  * Plugin URI: https://wp-turbo.com/turbo-shipping-rules-for-woocommerce/
  * Description: Easily manage WooCommerce shipping with custom states (inside city, outside city, intercity) and advanced weight-based shipping methods filtered by product categories. Fast, simple, and powerful shipping manager for WooCommerce.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Requires Plugins: woocommerce
  * Author: Turbo Addons
  * Author URI: https://wp-turbo.com/
@@ -12,9 +12,9 @@
  * Text Domain: turbo-shipping-rules-for-woocommerce
  * Requires at least: 5.4
  * Requires PHP: 7.2
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * WC requires at least: 6.1
- * WC tested up to: 10.2
+ * WC tested up to: 10.6
  */
 
 if (!defined('ABSPATH')) exit;
@@ -57,7 +57,7 @@ if ( class_exists( 'WPPulse_SDK' ) ) {
 if (!class_exists('TSRFW_Shipping_Rules_For_Woo')) {
     final class TSRFW_Shipping_Rules_For_Woo {
         private static $instance = null;
-        const TSRFW_VERSION = '1.0.1';
+        const TSRFW_VERSION = '1.0.2';
         public static function instance() {
             if (self::$instance === null) {
                 self::$instance = new self();
